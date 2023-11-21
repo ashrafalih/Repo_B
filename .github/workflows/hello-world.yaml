@@ -1,0 +1,13 @@
+name : Hello-world
+
+on: # wit will tell when to trigger the workflow
+  workflow_dispatch: #this key help us to run work flow mannually
+
+jobs:
+  print-hello-world: #defined name of the job
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: sya-hello
+        run: echo "hello-wrold"
+
