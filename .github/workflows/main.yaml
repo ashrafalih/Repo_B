@@ -1,4 +1,4 @@
-name: workflow_03
+name: workflow_02
 on:
   repository_dispatch:
   workflow_dispatch:
