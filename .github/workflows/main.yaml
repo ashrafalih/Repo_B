@@ -21,11 +21,13 @@ jobs:
 
       - name: Commit and Push
         run: |
+          git remote remove origin
           git config --global user.email "shaikashrafali.in@gmail.com"
           git config --global user.name "ashrafalih"
           git add values.yaml
           git commit -m "Update tag value"
-          git push origin ${{ github.event.client_payload.branch_name }}      
+          git remote add origin_with_token "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git push origin_with_token ${{ github.event.client_payload.branch_name }}  
 
 ########
 # name: Update Branch
