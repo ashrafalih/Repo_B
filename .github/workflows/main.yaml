@@ -22,7 +22,7 @@ jobs:
       - name: Commit and Push
         run: |
           git config --global user.email "shaikashrafali.in@gmail.com"
-          git config --global user.name "ashraf"
+          git config --global user.name "ashrafalih"
           git add values.yaml
           git commit -m "Update tag value"
           git push origin ${{ github.event.client_payload.branch_name }}      
