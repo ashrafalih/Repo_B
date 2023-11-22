@@ -16,7 +16,8 @@ jobs:
         run: git show-ref --verify --quiet "refs/heads/${{ github.event.client_payload.branch_name }}" || git branch ${{ github.event.client_payload.branch_name }}
 
       - name: Update Tag Value in File
-        run: echo "tag: ${{ github.event.client_payload.docker_image_tag }}" > values.yaml
+        run: |
+          echo "tag: ${{ github.event.client_payload.docker_image_tag }}" > values.yaml
 
       - name: Commit and Push
         run: |
