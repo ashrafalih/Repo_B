@@ -18,6 +18,8 @@ jobs:
       - name: Update Tag Value in File
         run: |
           echo "tag: ${{ github.event.client_payload.docker_image_tag }}" > values.yaml
+          echo "****************************************"
+          cat values.yaml
 
       - name: Commit and Push
         run: |
