@@ -11,7 +11,7 @@ jobs:
       - run: echo "Triggering Workflow 2"
       - name: Checkout
         uses: actions/checkout@v2
-        
+
       - name: Check if Branch Exists
         run: git show-ref --verify --quiet "refs/heads/${{ github.event.client_payload.branch_name }}" || git branch ${{ github.event.client_payload.branch_name }}
 
@@ -21,6 +21,8 @@ jobs:
 
       - name: Commit and Push
         run: |
+          git config --global user.email "shaikashrafali.in@gmail.com"
+          git config --global user.name "ashraf"
           git add values.yaml
           git commit -m "Update tag value"
           git push origin ${{ github.event.client_payload.branch_name }}      
