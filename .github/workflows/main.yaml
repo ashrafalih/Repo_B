@@ -2,6 +2,8 @@ name: workflow_02
 on:
   repository_dispatch:
   workflow_dispatch:
+    types:
+      - update-branch
 
 jobs:
   cypress-run:
@@ -11,7 +13,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-
+########
 # name: Update Branch
 # on:
 #   workflow_dispatch:
@@ -41,4 +43,3 @@ jobs:
       #     git commit -m "Update tag value"
       #     git push origin ${{ github.event.client_payload.branch_name }}
 
-#pesonal access token for github: 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
