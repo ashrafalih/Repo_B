@@ -5,12 +5,25 @@ on:
   
 
 jobs:
-  cypress-run:
+  update-branch:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Triggering Workflow 2"
       - name: Checkout
         uses: actions/checkout@v2
+        
+      - name: Check if Branch Exists
+        run: git show-ref --verify --quiet "refs/heads/${{ github.event.client_payload.branch_name }}" || git branch ${{ github.event.client_payload.branch_name }}
+
+      - name: Update Tag Value in File
+        run: |
+          echo "tag: ${{ github.event.client_payload.docker_image_tag }}" > values.yaml
+
+      - name: Commit and Push
+        run: |
+          git add values.yaml
+          git commit -m "Update tag value"
+          git push origin ${{ github.event.client_payload.branch_name }}      
 
 ########
 # name: Update Branch
