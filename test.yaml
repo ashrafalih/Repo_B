@@ -1,0 +1,30 @@
+# name: Update Branch
+# on:
+#   workflow_dispatch:
+#   repository_dispatch:
+#     types:
+#       - update-branch
+
+# jobs:
+#   update-branch:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - run: echo "Triggering Wokflow 2"
+#       - name: Checkout Repo B
+#         uses: actions/checkout@v2
+
+      # - name: Check if Branch Exists
+      #   run: git show-ref --verify --quiet "refs/heads/${{ github.event.client_payload.branch_name }}" || git branch ${{ github.event.client_payload.branch_name }}
+
+      # - name: Update Tag Value in File
+      #   run: |
+      #     echo "tag: ${{ github.event.client_payload.docker_image_tag }}" > values.yaml
+
+      # - name: Commit and Push
+      #   run: |
+      #     git add values.yaml
+      #     git commit -m "Update tag value"
+      #     git push origin ${{ github.event.client_payload.branch_name }}
+
+#pesonal access token for github: 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
