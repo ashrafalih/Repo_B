@@ -28,9 +28,11 @@ jobs:
       - name: Update values.yaml
         run: |
           echo "imageTag: $repo1_image_tag" > values.yaml
+          cat values.yaml
 
       - name: Commit and Push Changes
         run: |
+          git config --list
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add values.yaml
