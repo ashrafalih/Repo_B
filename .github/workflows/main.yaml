@@ -1,39 +1,77 @@
-name: workflow_02
+name: workflow_2
+
 on:
-  repository_dispatch:
-  workflow_dispatch:
   workflow_run:
-    workflows: ["workflow_01"]
+    workflows: ["workflow_1"]
     types:
       - completed
-  
 
 jobs:
-  update-branch:
+  update-values:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Triggering Workflow 2"
-      - name: Checkout
+      - name: Checkout Repo_2
         uses: actions/checkout@v2
 
-      - name: Check if Branch Exists
-        run: git show-ref --verify --quiet "refs/heads/${{ github.event.client_payload.branch_name }}" || git branch ${{ github.event.client_payload.branch_name }}
-
-      - name: Update Tag Value in File
+      - name: Get Image Tag from Repo_1
         run: |
-          echo "tag: ${{ github.event.client_payload.docker_image_tag }}" > values.yaml
-          echo "****************************************"
-          cat values.yaml
+          repo1_owner="ashrafalih"
+          repo1_name="Repo_A"
+          repo1_image_tag=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                            -H "Accept: application/vnd.github.v3+json" \
+                            "https://api.github.com/repos/$repo1_owner/$repo1_name/actions/workflows/workflow_1.yml/runs?event=push" \
+                            | jq -r '.workflow_runs[0].outputs.image_tag')
+          echo "repo1_image_tag=$repo1_image_tag" >> $GITHUB_ENV
 
-      - name: Commit and Push
+      - name: Update values.yaml
         run: |
-          git config --global user.email "shaikashrafali.in@gmail.com"
-          git config --global user.name "ashrafalih"
+          echo "imageTag: $repo1_image_tag" > values.yaml
+
+      - name: Commit and Push Changes
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
           git add values.yaml
-          git commit -m "Update tag value"
-          git remote add origin_with_token "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
-          git push origin_with_token ${{ github.event.client_payload.branch_name }}
-          git push --set-upstream origin_with_token ${{ github.event.client_payload.branch_name }}
+          git commit -m "Update imageTag in values.yaml"
+          git push
+
+############################################################
+# name: workflow_02
+# on:
+#   # repository_dispatch:
+#   workflow_dispatch:
+#   workflow_run:
+#     workflows: ["workflow_01"]
+#     types:
+#       - completed
+  
+
+# jobs:
+#   update-branch:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - run: echo "Triggering Workflow 2"
+#       - name: Checkout
+#         uses: actions/checkout@v2
+
+#       - name: Check if Branch Exists
+#         run: git show-ref --verify --quiet "refs/heads/${{ github.event.client_payload.branch_name }}" || git branch ${{ github.event.client_payload.branch_name }}
+
+#       - name: Update Tag Value in File
+#         run: |
+#           echo "tag: ${{ github.event.client_payload.docker_image_tag }}" > values.yaml
+#           echo "****************************************"
+#           cat values.yaml
+
+#       - name: Commit and Push
+#         run: |
+#           git config --global user.email "shaikashrafali.in@gmail.com"
+#           git config --global user.name "ashrafalih"
+#           git add values.yaml
+#           git commit -m "Update tag value"
+#           git remote add origin_with_token "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+#           git push origin_with_token ${{ github.event.client_payload.branch_name }}
+#           git push --set-upstream origin_with_token ${{ github.event.client_payload.branch_name }}
 
 ########
 # name: Update Branch
