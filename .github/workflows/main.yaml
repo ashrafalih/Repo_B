@@ -1,8 +1,10 @@
 name: workflow_2
 
 on:
+  repository_dispatch:
+  workflow_dispatch:
   workflow_run:
-    workflows: ["workflow_1"]
+    workflows: ["workflow_01"]
     types:
       - completed
 
